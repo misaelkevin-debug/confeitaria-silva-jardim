@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confeitaria Pro</title>
+
+    <!-- CSS externo (o conteúdo do seu <style> foi movido para style.css) -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Font Awesome para os ícones (bolo, busca, coração, etc.) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+</head>
+<body>
+    <!-- ===========================
+         Cabeçalho fixo com navegação
+         =========================== -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-birthday-cake"></i>
+                Confeitaria Pro
+            </div>
+
+            <!-- Menu desktop -->
+            <ul class="nav-links" id="navLinks">
+    <li><a href="https://meusite.com/CONFEITARIA-SILVA-JARDIM" data-section="home" class="active">Início</a></li>
+    <li><a href="https://meusite.com/CONFEITARIA-SILVA-JARDIM" data-section="recipes">Receitas</a></li>
+    <li><a href="https://meusite.com/CONFEITARIA-SILVA-JARDIM" data-section="favorites">Favoritos</a></li>
+    <li><a href="https://meusite.com/CONFEITARIA-SILVA-JARDIM" data-section="add-recipe">Adicionar</a></li>
+    <li><a href="https://meusite.com/CONFEITARIA-SILVA-JARDIM" data-section="tips">Dicas de Ouro</a></li>
+</ul>
+
+            <!-- Botão menu mobile -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===========================
+         Conteúdo principal
+         =========================== -->
+    <main class="container">
+        <!-- ====== HOME ====== -->
+        <section id="home" class="section">
+            <div class="hero">
+                <h1>Confeitaria - Do Zero ao Profissional</h1>
+                <p>Aprenda confeitaria com receitas organizadas por nível, dicas técnicas e ferramentas práticas</p>
+            </div>
+
+            <!-- Busca + filtros (home) -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar receitas, ingredientes ou tags..." />
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="iniciante">Iniciante</button>
+                    <button class="filter-btn" data-filter="intermediario">Intermediário</button>
+                    <button class="filter-btn" data-filter="avancado">Avançado</button>
+                </div>
+            </div>
+
+            <!-- Grid inicial de receitas -->
+            <div class="recipes-grid" id="recipesGrid"></div>
+        </section>
+
+        <!-- ====== RECEITAS ====== -->
+        <section id="recipes" class="section hidden">
+            <h2>Todas as Receitas</h2>
+
+            <!-- Busca + filtros (página de receitas) -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInputRecipes" placeholder="Buscar receitas, ingredientes ou tags..." />
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="iniciante">Iniciante</button>
+                    <button class="filter-btn" data-filter="intermediario">Intermediário</button>
+                    <button class="filter-btn" data-filter="avancado">Avançado</button>
+                </div>
+            </div>
+
+            <!-- Grid de receitas na página "Receitas" -->
+            <div class="recipes-grid" id="recipesGridPage"></div>
+        </section>
+
+        <!-- ====== FAVORITOS ====== -->
+        <section id="favorites" class="section hidden">
+            <h2>Suas Receitas Favoritas</h2>
+            <div class="recipes-grid" id="favoritesGrid"></div>
+        </section>
+
+        <!-- ====== ADICIONAR RECEITA ====== -->
+        <section id="add-recipe" class="section hidden">
+            <h2>Adicionar Nova Receita</h2>
+
+            <!-- Formulário que cria uma nova receita e salva no localStorage -->
+            <form class="add-recipe-form" id="addRecipeForm">
+                <div class="form-group">
+                    <label for="recipeName">Nome da Receita</label>
+                    <input type="text" id="recipeName" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="recipeTime">Tempo (minutos)</label>
+                        <input type="number" id="recipeTime" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeServings">Porções</label>
+                        <input type="number" id="recipeServings" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeLevel">Nível</label>
+                        <select id="recipeLevel" required>
+                            <option value="iniciante">Iniciante</option>
+                            <option value="intermediario">Intermediário</option>
+                            <option value="avancado">Avançado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeTags">Tags (separadas por vírgula)</label>
+                    <input type="text" id="recipeTags" placeholder="doce, festa, chocolate" />
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeIngredients">Ingredientes (um por linha)</label>
+                    <textarea id="recipeIngredients" required placeholder="200g farinha de trigo
+3 ovos
+250ml leite"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeInstructions">Modo de Preparo (um passo por linha)</label>
+                    <textarea id="recipeInstructions" required placeholder="Misture todos os ingredientes secos
+Adicione os ovos um a um
+Incorpore o leite aos poucos"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeTips">Dicas (opcional)</label>
+                    <textarea id="recipeTips" placeholder="Dicas importantes para o sucesso da receita"></textarea>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Receita
+                </button>
+            </form>
+        </section>
+
+        <!-- ====== DICAS ====== -->
+        <section id="tips" class="section hidden">
+            <div class="tips-section-main">
+                <h2>Dicas de Ouro da Confeitaria</h2>
+                <p>Conhecimentos essenciais para ter sucesso na confeitaria, desde técnicas básicas até segredos profissionais.</p>
+                
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h3><i class="fas fa-thermometer-half"></i> Temperatura dos Ingredientes</h3>
+                        <p>Sempre use ingredientes em temperatura ambiente, exceto quando especificado. Ovos e manteiga frios podem talhar a massa.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-balance-scale"></i> Medidas Precisas</h3>
+                        <p>Na confeitaria, precisão é fundamental. Use balança sempre que possível. Uma colher de sopa pode variar de 10g a 20g.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-fire"></i> Pré-aquecimento do Forno</h3>
+                        <p>Sempre pré-aqueça o forno por pelo menos 15 minutos antes de usar. Temperatura incorreta pode arruinar toda a receita.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-egg"></i> Ponto das Claras</h3>
+                        <p>Claras em neve: bowl e utensílios limpos, sem gordura. Ponto certo é quando não escorre ao virar o bowl.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-cookie-bite"></i> Mistura Delicada</h3>
+                        <p>Movimentos envolventes de baixo para cima preservam o ar incorporado. Nunca bata demais após adicionar a farinha.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-clock"></i> Tempo de Descanso</h3>
+                        <p>Respeite os tempos de descanso das massas. Elas precisam relaxar para desenvolver textura e sabor adequados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===========================
+         Modal de detalhes da receita
+         =========================== -->
+    <div id="recipeModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal()" aria-label="Fechar modal">&times;</button>
+                <h2 id="modalRecipeTitle"></h2>
+                <div class="recipe-meta" id="modalRecipeMeta"></div>
+            </div>
+
+            <div class="modal-body">
+                <img id="modalRecipeImage" class="recipe-detail-image" alt="" />
+
+                <!-- Ingredientes com calculadora de porções -->
+                <div class="ingredients-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-list-ul"></i>
+                        Ingredientes
+                    </h3>
+                    <div class="calculator-controls">
+                        <label for="portionCalculator">Calcular para:</label>
+                        <input type="number" id="portionCalculator" min="1" value="1" />
+                        <span>porções</span>
+                        <button class="calc-btn" onclick="calculateIngredients()">Calcular</button>
+                        <button class="calc-btn btn-secondary" onclick="resetCalculator()">Reset</button>
+                    </div>
+                    <ul class="ingredients-list" id="modalIngredientsList"></ul>
+                </div>
+
+                <!-- Modo de preparo -->
+                <div class="instructions-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Modo de Preparo
+                    </h3>
+                    <ol class="instructions-list" id="modalInstructionsList"></ol>
+                </div>
+
+                <!-- Dicas extras (se houver) -->
+                <div class="tips-section" id="modalTipsSection">
+                    <h3 class="section-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Dicas Importantes
+                    </h3>
+                    <ul class="tips-list" id="modalTipsList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback (sucesso/erro) -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ===========================
+         JavaScript da aplicação
+         (mantido aqui como no seu arquivo original)
+         =========================== -->
+    <script>
+        /* ===========================
+           Base de receitas (inicial)
+           =========================== */
+        let recipes = [
+            {
+                id: 1,
+                name: "Bolo de Cenoura",
+                time: 60,
+                servings: 8,
+                level: "iniciante",
+                tags: ["doce", "festa", "cenoura", "chocolate"],
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0d6ec324-0446-40db-bef5-fb338c00b7ef.png",
+                imageAlt: "Bolo de cenoura com cobertura de chocolate",
+                ingredients: [
+                    "3 cenouras médias",
+                    "4 ovos",
+                    "1/2 xícara óleo",
+                    "2 xícaras açúcar",
+                    "2 xícaras farinha de trigo",
+                    "1 colher sopa fermento"
+                ],
+                instructions: [
+                    "Bata no liquidificador cenoura, ovos e óleo",
+                    "Misture açúcar e farinha em bowl",
+                    "Junte os ingredientes líquidos aos secos",
+                    "Adicione fermento e misture delicadamente",
+                    "Asse em forma untada por 40 minutos a 180°C"
+                ],
+                tips: [
+                    "Teste com palito se está assado",
+                    "Cenouras bem doces dispensam açúcar extra",
+                    "Deixe esfriar antes de desenformar"
+                ]
+            },
+            {
+                id: 2,
+                name: "Brigadeiro Gourmet",
+                time: 30,
+                servings: 20,
+                level: "iniciante",
+                tags: ["doce", "festa", "chocolate", "brigadeiro"],
+                image: "https://placehold.co/400x300",
+                imageAlt: "Brigadeiros gourmet com coberturas variadas",
+                ingredients: [
+                    "1 lata leite condensado",
+                    "2 colheres sopa cacau em pó",
+                    "1 colher sopa manteiga",
+                    "Granulado para decorar"
+                ],
+                instructions: [
+                    "Misture todos os ingredientes na panela",
+                    "Cozinhe em fogo baixo mexendo sempre",
+                    "Ponto certo: desgruda do fundo da panela",
+                    "Deixe esfriar e modele bolinhas",
+                    "Passe no granulado e sirva"
+                ],
+                tips: [
+                    "Fogo baixo evita queimar",
+                    "Mãos untadas facilitam modelar",
+                    "Pode fazer no micro-ondas em intervalos"
+                ]
+            },
+            {
+                id: 3,
+                name: "Ganache de Chocolate",
+                time: 15,
+                servings: 10,
+                level: "intermediario",
+                tags: ["cobertura", "chocolate", "creme"],
+                image: "https://placehold.co/400x300",
+                imageAlt: "Ganache de chocolate brilhante sendo derramada em bolo",
+                ingredients: [
+                    "200g chocolate meio amargo",
+                    "200ml creme de leite fresco",
+                    "1 colher sopa manteiga"
+                ],
+                instructions: [
+                    "Pique o chocolate em pedaços pequenos",
+                    "Aqueça o creme sem ferver",
+                    "Despeje sobre o chocolate e aguarde 2 minutos",
+                    "Misture do centro para fora até homogeneizar",
+                    "Adicione manteiga e misture até brilhar"
+                ],
+                tips: [
+                    "Creme muito quente pode talhar",
+                    "Chocolate de qualidade faz diferença",
+                    "Ganache morna é ideal para cobertura"
+                ]
+            },
+            {
+                id: 4,
+                name: "Macaron Francês",
+                time: 180,
+                servings: 24,
+                level: "avancado",
+                tags: ["macaron", "francês", "refinado", "técnico"],
+                image: "https://placehold.co/400x300",
+                imageAlt: "Macarons coloridos em tons pastel em bandeja",
+                ingredients: [
+                    "125g farinha de amêndoa",
+                    "200g açúcar impalpável",
+                    "75g claras (envelhecidas)",
+                    "25g açúcar refinado",
+                    "Corante em gel"
+                ],
+                instructions: [
+                    "Peneire farinha de amêndoa e açúcar impalpável 3 vezes",
+                    "Bata claras até espuma, adicione açúcar aos poucos",
+                    "Continue batendo até pico firme e brilhante",
+                    "Adicione corante e faça macaronage até ponto",
+                    "Confeccione discos e deixe formar película",
+                    "Asse a 140°C por 15-18 minutos"
+                ],
+                tips: [
+                    "Claras envelhecidas são essenciais",
+                    "Macaronage correto define o sucesso",
+                    "Filme deve formar em 30-60 minutos",
+                    "Forno calibrado é fundamental"
+                ]
+            }
+        ];
+
+        /* ===========================
+           LocalStorage - carregar e salvar
+           =========================== */
+        function loadUserRecipes() {
+            const userRecipes = localStorage.getItem('userRecipes');
+            if (userRecipes) {
+                const parsed = JSON.parse(userRecipes);
+                // Evita duplicar receitas ao recarregar
+                parsed.forEach(recipe => {
+                    if (!recipes.find(r => r.id === recipe.id)) {
+                        recipes.push(recipe);
+                    }
+                });
+            }
+        }
+
+        function saveUserRecipes() {
+            // Convenção: receitas criadas pelo usuário têm ID > 1000
+            const userRecipes = recipes.filter(r => r.id > 1000);
+            localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+        }
+
+        function loadFavorites() {
+            const favorites = localStorage.getItem('favorites');
+            return favorites ? JSON.parse(favorites) : [];
+        }
+
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        function getNextUserId() {
+            const userRecipes = recipes.filter(r => r.id > 1000);
+            return userRecipes.length > 0 ? Math.max(...userRecipes.map(r => r.id)) + 1 : 1001;
+        }
+
+        /* ===========================
+           Renderização das receitas (cards)
+           =========================== */
+        function renderRecipes(recipesToRender = recipes, containerId = 'recipesGrid') {
+            const container = document.getElementById(containerId);
+            const favorites = loadFavorites();
+
+            if (!container) return;
+
+            if (recipesToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhuma receita encontrada</h3>
+                        <p>Tente buscar por outros termos ou filtros</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recipesToRender.map(recipe => `
+                <div class="recipe-card" onclick="openRecipeModal(${recipe.id})">
+                    <div class="recipe-image">
+                        <img src="${recipe.image}" alt="${recipe.imageAlt || recipe.name}" />
+                        <div class="recipe-level level-${recipe.level}">${recipe.level}</div>
+                        <button class="favorite-btn ${favorites.includes(recipe.id) ? 'favorited' : ''}" 
+                                onclick="event.stopPropagation(); toggleFavorite(${recipe.id})" aria-label="Favoritar">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">${recipe.name}</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> ${recipe.time} min</span>
+                            <span><i class="fas fa-users"></i> ${recipe.servings} porções</span>
+                        </div>
+                        <div class="recipe-tags">
+                            ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* ===========================
+           Filtro + busca
+           =========================== */
+        function filterRecipes(searchTerm = '', levelFilter = 'all', containerId = 'recipesGrid') {
+            let filtered = recipes;
+
+            if (levelFilter !== 'all') {
+                filtered = filtered.filter(r => r.level === levelFilter);
+            }
+
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(r =>
+                    r.name.toLowerCase().includes(term) ||
+                    r.tags.some(tag => tag.toLowerCase().includes(term)) ||
+                    r.ingredients.some(ing => ing.toLowerCase().includes(term))
+                );
+            }
+
+            renderRecipes(filtered, containerId);
+        }
+
+        /* ===========================
+           Favoritos
+           =========================== */
+        function toggleFavorite(recipeId) {
+            const favorites = loadFavorites();
+            const index = favorites.indexOf(recipeId);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('Receita removida dos favoritos', 'error');
+            } else {
+                favorites.push(recipeId);
+                showToast('Receita adicionada aos favoritos');
+            }
+
+            saveFavorites(favorites);
+
+            // Atualiza o ícone de coração em todos os cards
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const id = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+                btn.classList.toggle('favorited', favorites.includes(id));
+            });
+
+            // Se a seção de favoritos estiver visível, re-renderiza
+            const favSection = document.getElementById('favorites');
+            if (favSection && !favSection.classList.contains('hidden')) {
+                renderFavorites();
+            }
+        }
+
+        function renderFavorites() {
+            const favorites = loadFavorites();
+            const favoriteRecipes = recipes.filter(r => favorites.includes(r.id));
+            renderRecipes(favoriteRecipes, 'favoritesGrid');
+        }
+
+        /* ===========================
+           Modal de receita
+           =========================== */
+        function openRecipeModal(recipeId) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (!recipe) return;
+
+            document.getElementById('modalRecipeTitle').textContent = recipe.name;
+            document.getElementById('modalRecipeMeta').innerHTML = `
+                <span><i class="fas fa-clock"></i> ${recipe.time} min</span>
+                <span><i class="fas fa-users"></i> ${recipe.servings} porções</span>
+                <span class="recipe-level level-${recipe.level}">${recipe.level}</span>
+            `;
+
+            const modalImage = document.getElementById('modalRecipeImage');
+            modalImage.src = recipe.image;
+            modalImage.alt = recipe.imageAlt || recipe.name;
+
+            // Ajusta porções iniciais
+            document.getElementById('portionCalculator').value = recipe.servings;
+
+            renderIngredients(recipe.ingredients, recipe.servings);
+
+            // Passo a passo
+            document.getElementById('modalInstructionsList').innerHTML =
+                recipe.instructions.map(step => `<li>${step}</li>`).join('');
+
+            // Dicas (se existirem)
+            if (recipe.tips && recipe.tips.length > 0) {
+                document.getElementById('modalTipsSection').style.display = 'block';
+                document.getElementById('modalTipsList').innerHTML =
+                    recipe.tips.map(t => `<li>${t}</li>`).join('');
+            } else {
+                document.getElementById('modalTipsSection').style.display = 'none';
+            }
+
+            document.getElementById('recipeModal').style.display = 'block';
+            window.currentRecipe = recipe; // guarda receita atual para a calculadora
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
+        /* ===========================
+           Ingredientes + calculadora
+           =========================== */
+        function renderIngredients(ingredients, servings) {
+            const list = document.getElementById('modalIngredientsList');
+            list.innerHTML = ingredients.map(ingredient => {
+                // Pega a primeira "palavra" como quantidade
+                const [amount, ...rest] = ingredient.split(' ');
+                const ingredientName = rest.join(' ');
+                return `
+                    <li>
+                        <span>${ingredientName}</span>
+                        <span class="ingredient-amount" data-original="${amount}">${amount}</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function calculateIngredients() {
+            if (!window.currentRecipe) return;
+
+            const newServings = parseInt(document.getElementById('portionCalculator').value);
+            const originalServings = window.currentRecipe.servings;
+            const ratio = newServings / originalServings;
+
+            document.querySelectorAll('.ingredient-amount').forEach(el => {
+                const original = el.getAttribute('data-original');
+                const calculated = calculateAmount(original, ratio);
+                el.textContent = calculated;
+            });
+
+            showToast(`Ingredientes calculados para ${newServings} porções`);
+        }
+
+        function resetCalculator() {
+            if (!window.currentRecipe) return;
+
+            document.getElementById('portionCalculator').value = window.currentRecipe.servings;
+
+            document.querySelectorAll('.ingredient-amount').forEach(el => {
+                const original = el.getAttribute('data-original');
+                el.textContent = original;
+            });
+
+            showToast('Calculadora resetada');
+        }
+
+        // Converte quantidades (número ou fração) aplicando o novo fator
+        function calculateAmount(original, ratio) {
+            // Frações simples (ex.: 1/2, 1/4, 3/4)
+            if (original.includes('/')) {
+                const [numerator, denominator] = original.split('/').map(Number);
+                const decimal = numerator / denominator;
+                const result = decimal * ratio;
+
+                if (result === 0.5) return '1/2';
+                if (result === 0.25) return '1/4';
+                if (result === 0.75) return '3/4';
+                if (result === 1) return '1';
+
+                return result.toFixed(1).replace('.0', '');
+            }
+
+            // Números comuns
+            const number = parseFloat(original);
+            if (!isNaN(number)) {
+                const result = number * ratio;
+                return result.toFixed(1).replace('.0', '');
+            }
+
+            // Se não for número, mantém original
+            return original;
+        }
+
+        /* ===========================
+           Criação de nova receita
+           =========================== */
+        function addRecipe(formData) {
+            const newRecipe = {
+                id: getNextUserId(),
+                name: formData.name,
+                time: parseInt(formData.time),
+                servings: parseInt(formData.servings),
+                level: formData.level,
+                tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+                image: 'https://placehold.co/400x300',
+                imageAlt: `Receita ${formData.name} criada pelo usuário`,
+                ingredients: formData.ingredients.split('\n').filter(s => s.trim()),
+                instructions: formData.instructions.split('\n').filter(s => s.trim()),
+                tips: formData.tips ? formData.tips.split('\n').filter(s => s.trim()) : []
+            };
+
+            recipes.push(newRecipe);
+            saveUserRecipes();
+            showToast('Receita adicionada com sucesso!');
+            document.getElementById('addRecipeForm').reset();
+            renderRecipes();
+        }
+
+        /* ===========================
+           Toast (avisos)
+           =========================== */
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        /* ===========================
+           Navegação entre seções (SPA simples)
+           =========================== */
+        function showSection(sectionId) {
+            // Esconde todas
+            document.querySelectorAll('.section').forEach(sec => sec.classList.add('hidden'));
+
+            // Mostra a escolhida
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Atualiza destaque no menu
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const link = document.querySelector(`[data-section="${sectionId}"]`);
+            if (link) link.classList.add('active');
+
+            // Carregamentos específicos
+            if (sectionId === 'favorites') {
+                renderFavorites();
+            } else if (sectionId === 'recipes') {
+                renderRecipes(recipes, 'recipesGridPage');
+            }
+        }
+
+        /* ===========================
+           Eventos (inicialização)
+           =========================== */
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserRecipes();  // carrega receitas do usuário (localStorage)
+            renderRecipes();    // render inicial (home)
+
+            // Navegação por cliques no menu
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showSection(this.getAttribute('data-section'));
+                });
+            });
+
+            // Menu mobile
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('active');
+            });
+
+            // Busca nos dois campos (home e receitas)
+            ['searchInput', 'searchInputRecipes'].forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+
+                const containerId = inputId === 'searchInput' ? 'recipesGrid' : 'recipesGridPage';
+                input.addEventListener('input', function() {
+                    const activeFilter = this.closest('.search-container')
+                        .querySelector('.filter-btn.active')
+                        .getAttribute('data-filter');
+                    filterRecipes(this.value, activeFilter, containerId);
+                });
+            });
+
+            // Filtros (todos os botões com .filter-btn)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('filter-btn')) {
+                    const container = e.target.closest('.search-container');
+                    const searchInput = container.querySelector('input');
+                    const containerId = searchInput.id === 'searchInput' ? 'recipesGrid' : 'recipesGridPage';
+
+                    // Marca o filtro ativo
+                    container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Aplica filtro + termo atual
+                    filterRecipes(searchInput.value, e.target.getAttribute('data-filter'), containerId);
+                }
+            });
+
+            // Envio do formulário "Adicionar Receita"
+            document.getElementById('addRecipeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = {
+                    name: document.getElementById('recipeName').value,
+                    time: document.getElementById('recipeTime').value,
+                    servings: document.getElementById('recipeServings').value,
+                    level: document.getElementById('recipeLevel').value,
+                    tags: document.getElementById('recipeTags').value,
+                    ingredients: document.getElementById('recipeIngredients').value,
+                    instructions: document.getElementById('recipeInstructions').value,
+                    tips: document.getElementById('recipeTips').value
+                };
+                addRecipe(formData);
+            });
+
+            // Fecha modal clicando fora
+            document.getElementById('recipeModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            // Fecha modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
